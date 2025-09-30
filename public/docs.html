@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/docs.css" />
+    <title>Documentation</title>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="back-btn">← Retour</a>
+      <h1>📚 Documentation API</h1>
+      <p>Gestion des Catways et Réservations</p>
+    </div>
+
+    <div class="container">
+      <!-- Introduction -->
+      <div class="intro">
+        <h2>Introduction</h2>
+        <p>
+          Bienvenue dans la documentation de l'API de gestion des catways. Cette
+          API RESTful vous permet de gérer les pontons et leurs réservations de
+          manière sécurisée.
+        </p>
+
+        <div class="base-url">
+          <strong>Base URL:</strong> http://localhost:8080
+        </div>
+
+        <h3 style="margin-top: 20px; color: #667eea">Authentification</h3>
+        <p>
+          La plupart des endpoints nécessitent une authentification JWT. Incluez
+          le token dans le header:
+        </p>
+        <div class="code-block">
+          <pre>Authorization: Bearer &lt;votre_token&gt;</pre>
+        </div>
+      </div>
+
+      <!-- Auth Section -->
+      <div class="section">
+        <h2>🔐 Authentification</h2>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/register</span>
+          </div>
+          <p class="endpoint-description">
+            Créer un nouveau compte utilisateur
+          </p>
+
+          <h4>Body Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Requis</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">name</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Nom complet de l'utilisateur</td>
+              </tr>
+              <tr>
+                <td class="param-name">email</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Email (doit être unique)</td>
+              </tr>
+              <tr>
+                <td class="param-name">password</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Mot de passe (min 8 caractères)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Exemple de requête</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "name": "Jean Dupont",
+  "email": "jean.dupont@example.com",
+  "password": "motdepasse123"
+}</pre
+            >
+          </div>
+
+          <h4>Réponse (201 Created)</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "success": true,
+  "message": "Utilisateur créé avec succès",
+  "data": {
+    "id": "65f3a2b1c4d5e6f7g8h9i0j1",
+    "name": "Jean Dupont",
+    "email": "jean.dupont@example.com"
+  }
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/login</span>
+          </div>
+          <p class="endpoint-description">
+            Se connecter et obtenir un token JWT
+          </p>
+
+          <h4>Body Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Requis</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">email</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Email de l'utilisateur</td>
+              </tr>
+              <tr>
+                <td class="param-name">password</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Mot de passe</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Réponse (200 OK)</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "success": true,
+  "message": "Connexion réussie",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "65f3a2b1c4d5e6f7g8h9i0j1",
+    "name": "Jean Dupont",
+    "email": "jean.dupont@example.com"
+  }
+}</pre
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Catways Section -->
+      <div class="section">
+        <h2>🏗️ Catways</h2>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/catways</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Récupérer la liste de tous les catways
+          </p>
+
+          <h4>Réponse (200 OK)</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "65f3a2b1c4d5e6f7g8h9i0j1",
+      "catwayNumber": "A1",
+      "type": "long",
+      "catwayState": "Bon état",
+      "createdAt": "2025-09-30T10:00:00.000Z"
+    }
+  ],
+  "count": 1
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/catways/:id</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Récupérer les détails d'un catway spécifique
+          </p>
+
+          <h4>URL Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">id</td>
+                <td class="param-type">String</td>
+                <td>ID MongoDB du catway</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/catways</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">Créer un nouveau catway</p>
+
+          <h4>Body Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Requis</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">catwayNumber</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Numéro du catway (unique)</td>
+              </tr>
+              <tr>
+                <td class="param-name">type</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Type de catway (ex: long, court)</td>
+              </tr>
+              <tr>
+                <td class="param-name">catwayState</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>État du catway</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Exemple de requête</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "catwayNumber": "A1",
+  "type": "long",
+  "catwayState": "Bon état"
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method put">PUT</span>
+            <span class="endpoint-path">/catways/:id</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">Modifier l'état d'un catway</p>
+
+          <h4>Body Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Requis</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">catwayState</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Nouvel état du catway</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method delete">DELETE</span>
+            <span class="endpoint-path">/catways/:id</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Supprimer un catway et toutes ses réservations
+          </p>
+        </div>
+      </div>
+
+      <!-- Reservations Section -->
+      <div class="section">
+        <h2>📅 Réservations</h2>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/catways/:id/reservations</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Récupérer toutes les réservations d'un catway
+          </p>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path"
+              >/catways/:id/reservations/:idReservation</span
+            >
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Récupérer les détails d'une réservation spécifique
+          </p>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/catways/:id/reservations</span>
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">
+            Créer une nouvelle réservation pour un catway
+          </p>
+
+          <h4>Body Parameters</h4>
+          <table class="params-table">
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Requis</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="param-name">clientName</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Nom du client</td>
+              </tr>
+              <tr>
+                <td class="param-name">boatName</td>
+                <td class="param-type">String</td>
+                <td class="required">Oui</td>
+                <td>Nom du bateau</td>
+              </tr>
+              <tr>
+                <td class="param-name">checkIn</td>
+                <td class="param-type">Date</td>
+                <td class="required">Oui</td>
+                <td>Date d'arrivée (YYYY-MM-DD)</td>
+              </tr>
+              <tr>
+                <td class="param-name">checkOut</td>
+                <td class="param-type">Date</td>
+                <td class="required">Oui</td>
+                <td>Date de départ (YYYY-MM-DD)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Exemple de requête</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "clientName": "Marie Martin",
+  "boatName": "Liberté",
+  "checkIn": "2025-10-01",
+  "checkOut": "2025-10-15"
+}</pre
+            >
+          </div>
+
+          <h4>Réponse (201 Created)</h4>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copier</button>
+            <pre>
+{
+  "success": true,
+  "message": "Réservation créée avec succès",
+  "data": {
+    "_id": "65f3a2b1c4d5e6f7g8h9i0j2",
+    "catwayId": "65f3a2b1c4d5e6f7g8h9i0j1",
+    "catwayNumber": "A1",
+    "clientName": "Marie Martin",
+    "boatName": "Liberté",
+    "checkIn": "2025-10-01T00:00:00.000Z",
+    "checkOut": "2025-10-15T00:00:00.000Z",
+    "createdAt": "2025-09-30T12:30:00.000Z"
+  }
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header">
+            <span class="method delete">DELETE</span>
+            <span class="endpoint-path"
+              >/catways/:id/reservations/:idReservation</span
+            >
+            <span class="auth-badge">🔒 Auth requise</span>
+          </div>
+          <p class="endpoint-description">Supprimer une réservation</p>
+        </div>
+      </div>
+
+      <!-- Status Codes Section -->
+      <div class="section">
+        <h2>📊 Codes de statut HTTP</h2>
+        <div class="response-codes">
+          <div class="status-code success">
+            <div class="status-code-number">200 OK</div>
+            <div>Requête réussie</div>
+          </div>
+          <div class="status-code success">
+            <div class="status-code-number">201 Created</div>
+            <div>Ressource créée</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">400 Bad Request</div>
+            <div>Requête invalide</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">401 Unauthorized</div>
+            <div>Non authentifié</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">403 Forbidden</div>
+            <div>Token invalide</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">404 Not Found</div>
+            <div>Ressource introuvable</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">409 Conflict</div>
+            <div>Conflit (dates, etc.)</div>
+          </div>
+          <div class="status-code error">
+            <div class="status-code-number">500 Server Error</div>
+            <div>Erreur serveur</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Models Section -->
+      <div class="section">
+        <h2>📦 Modèles de données</h2>
+        <div class="models">
+          <div class="model-card">
+            <h3>User</h3>
+            <div class="model-field">
+              <span class="field-name">name</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">email</span>
+              <span class="field-type">String (unique)</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">password</span>
+              <span class="field-type">String (hashé)</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">createdAt</span>
+              <span class="field-type">Date</span>
+            </div>
+          </div>
+
+          <div class="model-card">
+            <h3>Catway</h3>
+            <div class="model-field">
+              <span class="field-name">catwayNumber</span>
+              <span class="field-type">String (unique)</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">type</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">catwayState</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">createdAt</span>
+              <span class="field-type">Date</span>
+            </div>
+          </div>
+
+          <div class="model-card">
+            <h3>Reservation</h3>
+            <div class="model-field">
+              <span class="field-name">catwayId</span>
+              <span class="field-type">ObjectId (ref)</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">catwayNumber</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">clientName</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">boatName</span>
+              <span class="field-type">String</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">checkIn</span>
+              <span class="field-type">Date</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">checkOut</span>
+              <span class="field-type">Date</span>
+            </div>
+            <div class="model-field">
+              <span class="field-name">createdAt</span>
+              <span class="field-type">Date</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function copyCode(button) {
+        const codeBlock = button.nextElementSibling;
+        const text = codeBlock.textContent;
+
+        navigator.clipboard.writeText(text).then(() => {
+          button.textContent = "Copié !";
+          button.classList.add("copied");
+
+          setTimeout(() => {
+            button.textContent = "Copier";
+            button.classList.remove("copied");
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

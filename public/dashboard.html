@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Dashboard - Catway</h1>
+    <div class="box1">
+      <!-- UTILISATEURS -->
+      <section>
+        <h2>Gestion des utilisateurs</h2>
+
+        <form id="createUserForm">
+          <h3>Créer un utilisateur</h3>
+          <label>Nom:</label><input type="text" name="name" required />
+          <label>Email:</label><input type="email" name="email" required />
+          <label>Mot de passe:</label
+          ><input type="password" name="password" required />
+          <button type="submit">Créer</button>
+          <div class="response" id="createUserResponse"></div>
+        </form>
+
+        <form id="updateUserForm">
+          <h3>Modifier un utilisateur (par ID)</h3>
+          <label>ID utilisateur:</label
+          ><input type="text" name="userId" required />
+          <label>Nouveau nom:</label><input type="text" name="name" />
+          <label>Nouvel email:</label><input type="email" name="email" />
+          <button type="submit">Modifier</button>
+          <div class="response" id="updateUserResponse"></div>
+        </form>
+
+        <form id="deleteUserForm">
+          <h3>Supprimer un utilisateur (par ID)</h3>
+          <label>ID utilisateur:</label
+          ><input type="text" name="userId" required />
+          <button type="submit">Supprimer</button>
+          <div class="response" id="deleteUserResponse"></div>
+        </form>
+      </section>
+
+      <!-- CATWAYS -->
+      <section>
+        <h2>Gestion des Catways</h2>
+
+        <form id="createCatwayForm">
+          <h3>Créer un catway</h3>
+          <label>Numéro:</label
+          ><input type="text" name="catwayNumber" required />
+          <label>Type:</label><input type="text" name="type" required />
+          <label>État:</label><input type="text" name="catwayState" required />
+          <button type="submit">Créer</button>
+          <div class="response" id="createCatwayResponse"></div>
+        </form>
+
+        <form id="updateCatwayForm">
+          <h3>Modifier l'état d'un catway (par ID)</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <label>Nouvel état:</label
+          ><input type="text" name="catwayState" required />
+          <button type="submit">Modifier</button>
+          <div class="response" id="updateCatwayResponse"></div>
+        </form>
+
+        <form id="deleteCatwayForm">
+          <h3>Supprimer un catway (par ID)</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <button type="submit">Supprimer</button>
+          <div class="response" id="deleteCatwayResponse"></div>
+        </form>
+
+        <form id="detailsCatwayForm">
+          <h3>Détails d'un catway (par ID)</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <button type="submit">Afficher</button>
+          <div class="response" id="detailsCatwayResponse"></div>
+        </form>
+
+        <p><a href="/catways" target="_blank">Liste des catways</a></p>
+      </section>
+
+      <!-- RESERVATIONS -->
+      <section>
+        <h2>Gestion des réservations</h2>
+
+        <form id="createReservationForm">
+          <h3>Enregistrer une réservation</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <label>Nom du client:</label
+          ><input type="text" name="clientName" required />
+          <label>Nom du bateau:</label
+          ><input type="text" name="boatName" required />
+          <label>Check-in:</label><input type="date" name="checkIn" required />
+          <label>Check-out:</label
+          ><input type="date" name="checkOut" required />
+          <button type="submit">Créer</button>
+          <div class="response" id="createReservationResponse"></div>
+        </form>
+
+        <form id="deleteReservationForm">
+          <h3>Supprimer une réservation (par ID)</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <label>ID Réservation:</label
+          ><input type="text" name="reservationId" required />
+          <button type="submit">Supprimer</button>
+          <div class="response" id="deleteReservationResponse"></div>
+        </form>
+
+        <form id="detailsReservationForm">
+          <h3>Détails d'une réservation (par ID)</h3>
+          <label>ID Catway:</label
+          ><input type="text" name="catwayId" required />
+          <label>ID Réservation:</label
+          ><input type="text" name="reservationId" required />
+          <button type="submit">Afficher</button>
+          <div class="response" id="detailsReservationResponse"></div>
+        </form>
+
+        <p>
+          <a href="/reservations" target="_blank">Liste des réservations</a>
+        </p>
+      </section>
+    </div>
+    <script>
+      const API_URL = "http://localhost:8080"; // URL de ton serveur
+      const token = localStorage.getItem("token") || ""; // Si tu utilises JWT
+
+      // Helper pour fetch avec gestion JWT
+      async function apiFetch(url, options = {}) {
+        options.headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          ...options.headers,
+        };
+        const res = await fetch(url, options);
+        return await res.json();
+      }
+
+      // --- USERS ---
+      document
+        .getElementById("createUserForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const data = {
+            name: form.name.value,
+            email: form.email.value,
+            password: form.password.value,
+          };
+          const res = await apiFetch(`${API_URL}/register`, {
+            method: "POST",
+            body: JSON.stringify(data),
+          });
+          document.getElementById("createUserResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("updateUserForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const data = {};
+          if (form.name.value) data.name = form.name.value;
+          if (form.email.value) data.email = form.email.value;
+          const res = await apiFetch(`${API_URL}/users/${form.userId.value}`, {
+            method: "PUT",
+            body: JSON.stringify(data),
+          });
+          document.getElementById("updateUserResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("deleteUserForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const res = await apiFetch(`${API_URL}/users/${form.userId.value}`, {
+            method: "DELETE",
+          });
+          document.getElementById("deleteUserResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      // --- CATWAYS ---
+      document
+        .getElementById("createCatwayForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const data = {
+            catwayNumber: form.catwayNumber.value,
+            type: form.type.value,
+            catwayState: form.catwayState.value,
+          };
+          const res = await apiFetch(`${API_URL}/catways`, {
+            method: "POST",
+            body: JSON.stringify(data),
+          });
+          document.getElementById("createCatwayResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("updateCatwayForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const data = { catwayState: form.catwayState.value };
+          const res = await apiFetch(
+            `${API_URL}/catways/${form.catwayId.value}`,
+            { method: "PUT", body: JSON.stringify(data) }
+          );
+          document.getElementById("updateCatwayResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("deleteCatwayForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const res = await apiFetch(
+            `${API_URL}/catways/${form.catwayId.value}`,
+            { method: "DELETE" }
+          );
+          document.getElementById("deleteCatwayResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("detailsCatwayForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const res = await apiFetch(
+            `${API_URL}/catways/${form.catwayId.value}`,
+            { method: "GET" }
+          );
+          document.getElementById("detailsCatwayResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      // --- RESERVATIONS ---
+      document
+        .getElementById("createReservationForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const data = {
+            clientName: form.clientName.value,
+            boatName: form.boatName.value,
+            checkIn: form.checkIn.value,
+            checkOut: form.checkOut.value,
+          };
+          const res = await apiFetch(
+            `${API_URL}/reservations/${form.catwayId.value}`,
+            { method: "POST", body: JSON.stringify(data) }
+          );
+          document.getElementById("createReservationResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("deleteReservationForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const res = await apiFetch(
+            `${API_URL}/reservations/${form.catwayId.value}/${form.reservationId.value}`,
+            { method: "DELETE" }
+          );
+          document.getElementById("deleteReservationResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+
+      document
+        .getElementById("detailsReservationForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const res = await apiFetch(
+            `${API_URL}/reservations/${form.catwayId.value}/${form.reservationId.value}`,
+            { method: "GET" }
+          );
+          document.getElementById("detailsReservationResponse").innerText =
+            JSON.stringify(res, null, 2);
+        });
+    </script>
+  </body>
+</html>
