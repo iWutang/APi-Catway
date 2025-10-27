@@ -1,0 +1,9 @@
+# Ignore les fichiers d'environnement
+.env
+.env.*
+
+# Dossier node_modules (utile pour les projets Node.js)
+node_modules/
+
+# Fichiers système courants
+.DS_Store
