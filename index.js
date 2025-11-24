@@ -7,7 +7,7 @@ const catwayRoutes = require("../routes/catwayRoutes");
 const reservationRoutes = require("../routes/reservationRoutes");
 
 const app = express();
-const PORT = 8080;
+// const PORT = 8080;
 
 // Middleware
 app.use(express.json());
