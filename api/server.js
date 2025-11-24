@@ -2,9 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoutes");
-const catwayRoutes = require("./routes/catwayRoutes");
-const reservationRoutes = require("./routes/reservationRoutes");
+const authRoutes = require("../routes/authRoutes");
+const catwayRoutes = require("../routes/catwayRoutes");
+const reservationRoutes = require("../routes/reservationRoutes");
 
 const app = express();
 const PORT = 8080;

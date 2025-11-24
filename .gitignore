@@ -3,7 +3,7 @@
 .env.*
 
 # Dossier node_modules (utile pour les projets Node.js)
-node_modules/
+node_modules
 
 # Fichiers système courants
 .DS_Store
