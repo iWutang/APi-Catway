@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const authService = require("../services/authService");
+const authServices = require("../services/authService");
 
 // Docs
 router.get("/docs", (req, res) => {
@@ -9,9 +9,9 @@ router.get("/docs", (req, res) => {
 });
 
 // Inscription
-router.post("/register", authService.createUser);
+router.post("/register", authServices.createUser);
 
 // Connexion
-router.post("/login", authService.loginUser);
+router.post("/login", authServices.loginUser);
 
 module.exports = router;
